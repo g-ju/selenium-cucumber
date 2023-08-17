@@ -9,5 +9,5 @@ Feature: Use the website to find restaurants
     Then I should see some restaurants in <postcode>
     Examples:
       | postcode |
-      | "AR51 1AA" |
+      | "SL4 2NR" |
 
