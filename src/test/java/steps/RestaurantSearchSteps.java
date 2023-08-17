@@ -7,6 +7,8 @@ import pages.HomePage;
 import pages.ResultsPage;
 import utils.DriverManager;
 
+import java.util.List;
+
 import static org.junit.Assert.assertTrue;
 
 public class RestaurantSearchSteps
@@ -31,6 +33,30 @@ public class RestaurantSearchSteps
     public void i_should_see_some_restaurants(String postcode)
     {
         assertTrue("Location does not contain correct postcode", resultsPage.getLocation().contains(postcode));
-        assertTrue("No restaurants found", resultsPage.getRestaurants().size() > 0);
+        assertTrue("No restaurants found", resultsPage.getNumRestaurants() > 0);
+    }
+
+    @Given("I am looking at restaurants in an area")
+    public void i_am_looking_at_restaurants_in_an_area()
+    {
+        resultsPage = new ResultsPage(DriverManager.getInstance().getDriver());
+        resultsPage.searchForArea("sl4-windsor");
+    }
+
+    @When("I filter by {string}")
+    public void i_filter_by(String type)
+    {
+        resultsPage.filterBy(type);
+    }
+
+    @Then("I should see restaurants of that {string}")
+    public void i_should_see_restaurants_of_that(String type)
+    {
+        assertTrue("No restaurants found", resultsPage.getNumRestaurants() > 0);
+        List<ResultsPage.RestaurantInfo> restaurantInfos = resultsPage.getAllRestaurantInfo();
+        for (ResultsPage.RestaurantInfo info : restaurantInfos)
+        {
+            assertTrue(info.getTypes().contains(type));
+        }
     }
 }

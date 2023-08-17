@@ -32,4 +32,10 @@ public class DriverManager
     {
         driver = new ChromeDriver();
     }
+
+    public void quit()
+    {
+        driver.quit();
+        driver = null;
+    }
 }

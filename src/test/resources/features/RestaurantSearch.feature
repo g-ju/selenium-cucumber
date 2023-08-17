@@ -11,3 +11,12 @@ Feature: Use the website to find restaurants
       | postcode |
       | "SL4 2NR" |
 
+    Scenario Outline: Filter restaurants by type
+      Given I am looking at restaurants in an area
+      When I filter by <type>
+      Then I should see restaurants of that <type>
+      Examples:
+        | type |
+        | "American" |
+
+
