@@ -59,4 +59,25 @@ public class RestaurantSearchSteps
             assertTrue(info.getTypes().contains(type));
         }
     }
+
+    @When("I sort by customer rating")
+    public void i_sort_by_customer_rating()
+    {
+        resultsPage.sortByRating();
+    }
+
+    @Then("the results should be sorted in descending order")
+    public void results_sorted_in_descending_order()
+    {
+        assertTrue("No restaurants found", resultsPage.getNumRestaurants() > 0);
+        List<ResultsPage.RestaurantInfo> restaurantInfos = resultsPage.getAllRestaurantInfo();
+        double rating = restaurantInfos.get(0).getRating();
+        // Just check 3 for the sake of the test
+        for (int i = 1; i < 3; i++)
+        {
+            double nextRating = restaurantInfos.get(i).getRating();
+            assertTrue(rating >= nextRating);
+            rating = nextRating;
+        }
+    }
 }

@@ -3,6 +3,9 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +17,8 @@ public class ResultsPage extends BasePage
     private final By locationHeader = By.className("c-locationHeader-title");
     private final By restaurantCard = By.cssSelector("a[data-test-id='f-restaurant-card--restaurant-card-component']");
     private final By filterBox = By.className("FilterPill_c-filterPill-text_2RTiU");
+    private final By sortOptions = By.cssSelector("span[data-test-id='sort_option_title']");
+    private final By ratingSortOption = By.cssSelector("label[for='Avg_Rating']");
 
     public ResultsPage(WebDriver driver)
     {
@@ -57,10 +62,23 @@ public class ResultsPage extends BasePage
         }
     }
 
+    public void sortByRating()
+    {
+        WebElement sortOptionTitle = driver.findElement(sortOptions);
+        Actions actions = new Actions(driver);
+        actions.moveToElement(sortOptionTitle).perform();
+
+        WebElement ratingOption = driver.findElement(ratingSortOption);
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        wait.until(ExpectedConditions.elementToBeClickable(ratingOption));
+        ratingOption.click();
+    }
+
     public static class RestaurantInfo
     {
         private final String name;
         private final List<String> types;
+        private final double rating;
 
         RestaurantInfo(WebElement restaurantElement)
         {
@@ -70,6 +88,7 @@ public class ResultsPage extends BasePage
                                      .stream()
                                      .map(WebElement::getText)
                                      .collect(Collectors.toList());
+            rating = Double.parseDouble(restaurantElement.findElement(By.cssSelector("data[data-test-id='ratings-mean-value']")).getText());
         }
 
         public String getName()
@@ -80,6 +99,10 @@ public class ResultsPage extends BasePage
         public List<String> getTypes()
         {
             return types;
+        }
+
+        public double getRating() {
+            return rating;
         }
     }
 }

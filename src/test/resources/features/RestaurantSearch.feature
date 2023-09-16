@@ -11,12 +11,18 @@ Feature: Use the website to find restaurants
       | postcode |
       | "SL4 2NR" |
 
-    Scenario Outline: Filter restaurants by type
-      Given I am looking at restaurants in an area
-      When I filter by <type>
-      Then I should see restaurants of that <type>
-      Examples:
-        | type |
-        | "American" |
+  Scenario Outline: Filter restaurants by type
+    Given I am looking at restaurants in an area
+    When I filter by <type>
+    Then I should see restaurants of that <type>
+    Examples:
+      | type |
+      | "American" |
+      | "Alcohol"  |
+
+  Scenario: Sort restaurants by customer rating
+    Given I am looking at restaurants in an area
+    When I sort by customer rating
+    Then the results should be sorted in descending order
 
 
